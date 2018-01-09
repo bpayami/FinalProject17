@@ -65,27 +65,27 @@ worldRooms = {
         'DESC': '',
         'GROUND': ['']},
     'Wing A from Grand Ballroom': {
-        'DOORS': {'FORWARD': 'Something Room', 'BACK': 'Grand Ballroom', 'LEFT': 'Main Hall from Wing A', 'RIGHT': 'Start'},
+        'DOORS': {'FORWARD': 'Something Room', 'BACK': 'Grand Ballroom', 'LEFT': 'Main Hall', 'RIGHT': 'Start'},
         'DESC': ''},
     'Wing B from Grand Ballroom': {
-        'DOORS': {'FORWARD': 'Study', 'BACK': 'Grand Ballroom', 'LEFT': 'Art Gallery', 'RIGHT': 'Main Hall from Wing B'},
+        'DOORS': {'FORWARD': 'Study', 'BACK': 'Grand Ballroom', 'LEFT': 'Art Gallery', 'RIGHT': 'Main Hall'},
         'DESC': ''},
     'Something Room': {
         'DOORS': {'LEFT': 'Wing A', 'RIGHT': 'Wing C'},
         'DESC': '',
         'GROUND': ['']},
     'Wing A from Something Room': {
-        'DOORS': {'FORWARD': 'Grand Ballroom', 'BACK': 'Something Room', 'LEFT': 'Start', 'RIGHT': 'Main Hall from Wing A'},
+        'DOORS': {'FORWARD': 'Grand Ballroom', 'BACK': 'Something Room', 'LEFT': 'Start', 'RIGHT': 'Main Hall'},
         'DESC': ''},
     'Wing C from Something Room': {
-        'DOORS': {'FORWARD': 'Library', 'BACK': 'Something Room', 'LEFT': 'Main Hall from Wing C', 'RIGHT': 'Locked Closet'},
+        'DOORS': {'FORWARD': 'Library', 'BACK': 'Something Room', 'LEFT': 'Main Hall', 'RIGHT': 'Locked Closet'},
         'DESC': ''},
     'Art Gallery': {
         'DOORS': {'FORWARD': 'Wing B'},
         'DESC': '',
         'GROUND': []},
     'Wing B from Art Gallery': {
-        'DOORS': {'FORWARD': 'Main Hall from Wing B', 'BACK': 'Art Gallery', 'LEFT': 'Study', 'RIGHT': 'Grand Ballroom'},
+        'DOORS': {'FORWARD': 'Main Hall', 'BACK': 'Art Gallery', 'LEFT': 'Study', 'RIGHT': 'Grand Ballroom'},
         'DESC': ''},
     'Locked Closet': {
         'DOORS': {'FORWARD': 'Wing C'},
@@ -93,14 +93,14 @@ worldRooms = {
         'SHOP': [''],
         'GROUND': ['Shop Howto']},
     'Wing C from Locked Closet': {
-        'DOORS': {'FORWARD': 'Main Hall from Wing C', 'BACK': 'Locked Closet', 'LEFT': 'Something Room', 'RIGHT': 'Library'},
+        'DOORS': {'FORWARD': 'Main Hall', 'BACK': 'Locked Closet', 'LEFT': 'Something Room', 'RIGHT': 'Library'},
         'DESC': ''},
     'Study': {
         'DOORS': {'LEFT': 'Wing D', 'RIGHT': 'Wing B'},
         'DESC': '',
         'GROUND': []},
     'Wing B from Study': {
-        'DOORS': {'FORWARD': 'Grand Ballroom', 'BACK': 'Study', 'LEFT': 'Main Hall from Wing B', 'RIGHT': 'Art Gallery'},
+        'DOORS': {'FORWARD': 'Grand Ballroom', 'BACK': 'Study', 'LEFT': 'Main Hall', 'RIGHT': 'Art Gallery'},
         'DESC': ''},
     'Wing D from Study': {
         'DOORS': {'FORWARD': 'Library', 'BACK': 'Study', 'LEFT': 'Kitchen', 'RIGHT': 'Long Corridor'},
@@ -115,7 +115,7 @@ worldRooms = {
         'DOWN': 'Library',     #SPECIAL CASE -- MIGHT NEED TWEAKING
         'GROUND': ['']},
     'Wing C from Library': {
-        'DOORS': {'FORWARD': 'Something Room', 'BACK': 'Library', 'LEFT': 'Locked Closet', 'RIGHT': 'Main Hall from Wing B'},
+        'DOORS': {'FORWARD': 'Something Room', 'BACK': 'Library', 'LEFT': 'Locked Closet', 'RIGHT': 'Main Hall'},
         'DESC': ''},
     'Wing D from Library': {
         'DOORS': {'FORWARD': 'Study', 'BACK': 'Library', 'LEFT': 'Long Corridor', 'RIGHT': 'Kitchen'},
@@ -140,26 +140,18 @@ worldRooms = {
     'Main Hall from Wing D': {
         'DOORS': {'LEFT': 'Wing C', 'RIGHT': 'Wing B'},
         'DESC': ''},
-    'Entrance to Wing A': {
-        'DESC': '',
-        'FORWARD': 'Start',
-        'LEFT': 'Something Room',
-        'RIGHT': 'Grand Ballroom'},
-    'Entrance to Wing B': {
-        'DESC': '',
-        'FORWARD': 'Art Gallery',
-        'LEFT': 'Grand Ballroom',
-        'RIGHT': 'Study'},
-    'Entrance to Wing C': {
-        'DESC': '',
-        'FORWARD': 'Locked Closet',
-        'LEFT': 'Library',
-        'RIGHT': 'Something Room'},
-    'Entrance to Wing D': {
-        'DESC': '',
-        'FORWARD': 'Kitchen',
-        'LEFT': 'Study',
-        'RIGHT': 'Library'},
+    'Wing A from Main Hall': {
+        'DOORS': {'FORWARD': 'Start', 'LEFT': 'Something Room', 'RIGHT': 'Grand Ballroom'},
+        'DESC': ''},
+    'Wing B from Main Hall': {
+        'DOORS': {'FORWARD': 'Art Gallery', 'LEFT': 'Grand Ballroom', 'RIGHT': 'Study'},
+        'DESC': ''},
+    'Wing C from Main Hall': {
+        'DOORS': {'FORWARD': 'Locked Closet', 'LEFT': 'Library', 'RIGHT': 'Something Room'},
+        'DESC': ''},
+    'Wing D from Main Hall': {
+        'DOORS': {'FORWARD': 'Kitchen', 'LEFT': 'Study', 'RIGHT': 'Library'},
+        'DESC': ''},
     'Long Corridor': {
         'DESC': '',
         'FORWARD': 'Locked Room',
@@ -213,16 +205,16 @@ class Room(object):
 
     def nextTurn(self):
         #prints room name
-        print(self.name)
-        print("=" * len(self.name))
-        """
-        if self.name != 'Main Hall from Wing A' or 'Main Hall from Wing B' or 'Main Hall from Wing C' or 'Main Hall from Wing D':
+        # print(self.name)
+        # print("=" * len(self.name))
+
+        if self.name not in ['Main Hall from Wing A', 'Main Hall from Wing B', 'Main Hall from Wing C', 'Main Hall from Wing D']:
             print(self.name)
             print("=" * len(self.name))
         else:
             print(self.exception)
             print("=" * len(self.exception))
-        """
+
 
         #prints description
         print(self.desc)
@@ -268,54 +260,14 @@ class Wing(object):
         #mimicing available rooms
         for k,v in self.walls.items():
             if v == True:
-                name_2 = (f'{self.name} from {prevlocation}')
+                if prevlocation not in ['Main Hall from Wing A', 'Main Hall from Wing B', 'Main Hall from Wing C', 'Main Hall from Wing D']:
+                    name_2 = (f'{self.name} from {prevlocation}')
+                else:
+                    name_2 = (f'{self.name} from Main Hall')
                 list1 = (worldRooms[name_2]['DOORS']).keys()
                 for n in list1:
                     print((str(f"{n}: {worldRooms[name_2]['DOORS'][n]}")).title())
             break
-
-class Hall(object):
-    """Create a room object
-
-    Each room is assumed to have four walls, with one possible door in each.
-    Each wall will either have a door or not. No support for closed/open doors yet
-    """
-
-    def __init__(self, name, desc, front=True, back=True, left=True, right=True):
-        self.name = name
-        self.exception = 'Main Hall'
-        self.walls = {'front': front, 'back': back, 'left': left, 'right': right}
-        self.desc = desc
-
-
-    def nextTurn(self):
-        #This will print 'Main Hall' as the name despite the true name
-        print(self.exception)
-        print("=" * len(self.exception))
-
-        #prints description
-        print(self.desc)
-
-        #prints available doors
-        for k, v in self.walls.items():
-            if v:
-                print(f"You see a door to the {k}.")
-
-        print(' ')
-
-        #prints which direction is which room
-        for k, v in self.walls.items():
-            if v == True:
-                if k == 'front':
-                    print(f'Forward: '+ worldRooms[self.name]['DOORS']['FORWARD'])
-                elif k == 'back':
-                    print(f'Back: ' + worldRooms[self.name]['DOORS']['BACK'])
-                elif k == 'left':
-                    print(f'Left: ' + worldRooms[self.name]['DOORS']['LEFT'])
-                elif k == 'right':
-                    print(f'Right: ' + worldRooms[self.name]['DOORS']['RIGHT'])
-                else:
-                    break
 
 class TextAdventureCmd(cmd.Cmd):
     prompt = '\n> '
@@ -380,10 +332,10 @@ while True:
             'library': Room(location, worldRooms[location]['DESC'], front=False, back=False), #has special case of 'up'
             'secretattic': Room(location, worldRooms[location]['DESC'], front=False, back=False, left=False, right=False), #ADD DOWN=FALSE TO CLASS
             'kitchen': Room(location, worldRooms[location]['DESC'], back=False, left=False, right=False),
-            'mainhallfromwinga': Hall(location, worldRooms[location]['DESC'], front=False, back=False),
-            'mainhallfromwingb': Hall(location, worldRooms[location]['DESC'], front=False, back=False),
-            'mainhallfromwingc': Hall(location, worldRooms[location]['DESC'], front=False, back=False),
-            'mainhallfromwingd': Hall(location, worldRooms[location]['DESC'], front=False, back=False)}
+            'mainhallfromwinga': Room(location, worldRooms[location]['DESC'], front=False, back=False),
+            'mainhallfromwingb': Room(location, worldRooms[location]['DESC'], front=False, back=False),
+            'mainhallfromwingc': Room(location, worldRooms[location]['DESC'], front=False, back=False),
+            'mainhallfromwingd': Room(location, worldRooms[location]['DESC'], front=False, back=False)}
         location_modified = location.lower()
         if ' ' in (location_modified):
             location_modified = location_modified.replace(" ", "")
@@ -418,7 +370,10 @@ while True:
         print(' ')
         user_input = str(input('Which way would you like to go next? ')).upper()
         print(' \n \n')
-        name_5 = str(f'{location} from {prevlocation}')
+        if prevlocation not in ['Main Hall from Wing A', 'Main Hall from Wing B', 'Main Hall from Wing C', 'Main Hall from Wing D']:
+            name_5 = str(f'{location} from {prevlocation}')
+        else:
+            name_5 = (f'{location} from Main Hall')
         newlocation = worldRooms[name_5]['DOORS'][user_input]
         prevlocation = location
         location = newlocation
