@@ -1,6 +1,7 @@
 #TO-DO LIST
     #Fix long corridor in association with Wing D
     #Figure out locked closet and locked door -perhaps checks inventory for code or true/false for open/close
+    #add something into class Room to print what objects are in the room (reference ground in dictionary) -- or just write into description
     #look function
     #take function
     #drop function
@@ -64,14 +65,15 @@ worldRooms = {
     'Start': {
         'DOORS': {'FORWARD': 'Wing A'},
         'DESC': 'You wake up in a room with no memory of how you got there. ...',
-        'GROUND': ['', '']},
+        'GROUND': ['Welcome Sign']},
     'Wing A from Start': {
         'DOORS': {'FORWARD': 'Main Hall', 'BACK': 'Start', 'LEFT': 'Grand Ballroom', 'RIGHT': 'Something Room'},
-        'DESC': ''},
+        'DESC': ''
+        'GROUND': ['Do Not Take This Sign Sign']},
     'Grand Ballroom': {
         'DOORS': {'LEFT': 'Wing B', 'RIGHT': 'Wing A'},
         'DESC': '',
-        'GROUND': ['']},
+        'GROUND': ['Shattered Glass']},
     'Wing A from Grand Ballroom': {
         'DOORS': {'FORWARD': 'Something Room', 'BACK': 'Grand Ballroom', 'LEFT': 'Main Hall', 'RIGHT': 'Start'},
         'DESC': ''},
@@ -81,7 +83,7 @@ worldRooms = {
     'Something Room': {
         'DOORS': {'LEFT': 'Wing A', 'RIGHT': 'Wing C'},
         'DESC': '',
-        'GROUND': ['']},
+        'GROUND': ['Something item']},
     'Wing A from Something Room': {
         'DOORS': {'FORWARD': 'Grand Ballroom', 'BACK': 'Something Room', 'LEFT': 'Start', 'RIGHT': 'Main Hall'},
         'DESC': ''},
@@ -91,7 +93,7 @@ worldRooms = {
     'Art Gallery': {
         'DOORS': {'FORWARD': 'Wing B'},
         'DESC': '',
-        'GROUND': []},
+        'GROUND': ['Frame']},
     'Wing B from Art Gallery': {
         'DOORS': {'FORWARD': 'Main Hall', 'BACK': 'Art Gallery', 'LEFT': 'Study', 'RIGHT': 'Grand Ballroom'},
         'DESC': ''},
@@ -99,14 +101,14 @@ worldRooms = {
         'DOORS': {'FORWARD': 'Wing C'},
         'DESC': '',
         'SHOP': [''],
-        'GROUND': ['Shop Howto']},
+        'GROUND': ['Code Sequence #2', 'Shop Howto']},
     'Wing C from Locked Closet': {
         'DOORS': {'FORWARD': 'Main Hall', 'BACK': 'Locked Closet', 'LEFT': 'Something Room', 'RIGHT': 'Library'},
         'DESC': ''},
     'Study': {
         'DOORS': {'LEFT': 'Wing D', 'RIGHT': 'Wing B'},
         'DESC': '',
-        'GROUND': []},
+        'GROUND': ['Fountain Pen']},
     'Wing B from Study': {
         'DOORS': {'FORWARD': 'Grand Ballroom', 'BACK': 'Study', 'LEFT': 'Main Hall', 'RIGHT': 'Art Gallery'},
         'DESC': ''},
@@ -117,11 +119,11 @@ worldRooms = {
         'DOORS': {'LEFT': 'Wing C', 'RIGHT': 'Wing D'},
         'DESC': '',
         'UP': 'Secret Attic',  #SPECIAL CASE -- MIGHT NEED TWEAKING
-        'GROUND': ['']},
+        'GROUND': ['Gold-Binded Book']},
     'Secret Attic': {
         'DESC': '',
         'DOWN': 'Library',     #SPECIAL CASE -- MIGHT NEED TWEAKING
-        'GROUND': ['']},
+        'GROUND': ['Map']},
     'Wing C from Library': {
         'DOORS': {'FORWARD': 'Something Room', 'BACK': 'Library', 'LEFT': 'Locked Closet', 'RIGHT': 'Main Hall'},
         'DESC': ''},
@@ -132,7 +134,7 @@ worldRooms = {
         'DOORS': {'FORWARD': 'Wing D'},
         'DESC': '',
         'SHOP': ['', '', ''],
-        'GROUND': ['', 'Shop Howto']},
+        'GROUND': ['Box', 'Shop Howto']},
     'Wing D from Kitchen': {
         'DOORS': {'FORWARD': 'Long Corridor', 'BACK': 'Kitchen', 'LEFT': 'Library', 'RIGHT': 'Study'},
         'DESC': ''},
@@ -195,6 +197,13 @@ worldWings = {
         'EAST': 'Library',
         'SOUTH': 'Main Hall from Wing D',
         'WEST': 'Study'}
+    }
+
+worldItems = {
+    'welcome sign': {'DESC': ''},
+    'do not take this sign sign': {'DESC': ''},
+    'map': {'DESC': 'this describes the map'},
+    'shovel': {'DESC': 'this describes the shovel'}
     }
 
 class Room(object):
@@ -277,6 +286,19 @@ class Wing(object):
                     print((str(f"{n}: {worldRooms[name_2]['DOORS'][n]}")).title())
             break
 
+class Object(object):
+    """Characters class"""
+
+    def __init__(self, name, takeable=True, edible=False):
+        self.name = name
+
+    def desc(self, item):
+        print(f"Hi I'm {item}")
+        #print(worldRooms[location][ground
+
+    def talk_to(self, some_person):
+        print(f"{self.name} talks to {some_person}")
+
 class TextAdventureCmd(cmd.Cmd):
     prompt = '\n> '
 
@@ -314,8 +336,12 @@ class TextAdventureCmd(cmd.Cmd):
     do_l = do_left
     do_r = do_right
 
-    def do_look(self, arg):
-        print('haha you looked')
+    def do_look(self, item):
+        item = item.lower()
+        if item not in worldRooms[location]['GROUND']:
+            print('You do not see that item.')
+        else:
+            print(worldItems[item]['DESC'])
         print('\n')
 
 
