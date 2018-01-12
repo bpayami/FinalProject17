@@ -1,7 +1,9 @@
 #TO-DO LIST
+    #Pick up progress at line 362
     #Fix long corridor in association with Wing D
     #Figure out locked closet and locked door -perhaps checks inventory for code or true/false for open/close
     #add something into class Room to print what objects are in the room (reference ground in dictionary) -- or just write into description
+    #fix quit function
     #look function
     #take function
     #drop function
@@ -68,7 +70,7 @@ worldRooms = {
         'GROUND': ['Welcome Sign']},
     'Wing A from Start': {
         'DOORS': {'FORWARD': 'Main Hall', 'BACK': 'Start', 'LEFT': 'Grand Ballroom', 'RIGHT': 'Something Room'},
-        'DESC': ''
+        'DESC': '',
         'GROUND': ['Do Not Take This Sign Sign']},
     'Grand Ballroom': {
         'DOORS': {'LEFT': 'Wing B', 'RIGHT': 'Wing A'},
@@ -200,10 +202,15 @@ worldWings = {
     }
 
 worldItems = {
-    'welcome sign': {'DESC': ''},
-    'do not take this sign sign': {'DESC': ''},
-    'map': {'DESC': 'this describes the map'},
-    'shovel': {'DESC': 'this describes the shovel'}
+    'Welcome Sign': {
+        'DESC': 'welcome',
+        'ALTNAMES': ['Sign']},
+    'Do Not Take This Sign Sign': {
+        'DESC': ''},
+    'Map': {
+        'DESC': 'this describes the map'},
+    'Shovel': {
+        'DESC': 'this describes the shovel'}
     }
 
 class Room(object):
@@ -336,13 +343,27 @@ class TextAdventureCmd(cmd.Cmd):
     do_l = do_left
     do_r = do_right
 
+
+    #THIS IS WHERE I AM WORKING NEXT
     def do_look(self, item):
-        item = item.lower()
-        if item not in worldRooms[location]['GROUND']:
+        item = item.title()
+
+        direct_name = worldRooms[location]['GROUND']
+        ground_objects = worldRooms[location]['GROUND']
+        for n in ground_objects:
+            indirect_name = worldItems[n]['ALTNAMES']
+
+        if item not in direct_name and item not in indirect_name:
             print('You do not see that item.')
         else:
-            print(worldItems[item]['DESC'])
-        print('\n')
+            if item in direct_name:
+                print(worldItems[item]['DESC'])
+            if item in indirect_name:
+                #convert short name to long name
+                official_name = 'whaaattttt?'                                                    #NEXT PROBLEM TO ADDRESS
+
+                print(worldItems)
+                print('this is a short name')
 
 
 #Begginning Fancy Stuff
