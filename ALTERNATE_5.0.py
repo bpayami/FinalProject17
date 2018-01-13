@@ -360,7 +360,7 @@ class TextAdventureCmd(cmd.Cmd):
                 print(worldItems[item]['DESC'])
             if item in indirect_name:
                 #convert short name to long name
-                official_name = 'whaaattttt?'                                                    #NEXT PROBLEM TO ADDRESS
+                official_name = 'whaaattttt?'   #NEXT PROBLEM TO ADDRESS -- short name in ALTNAMES need a way to ref back to its official name
 
                 print(worldItems)
                 print('this is a short name')
