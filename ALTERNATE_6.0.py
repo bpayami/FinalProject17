@@ -3,13 +3,12 @@
     #Fix long corridor in association with Wing D
     #Figure out locked closet and locked door -perhaps checks inventory for code or true/false for open/close
     #add something into class Room to print what objects are in the room (reference ground in dictionary) -- or just write into description
-    #fix quit function
     #look function
     #take function
     #drop function
     #eat function?
     #use function?
-    #help function
+    #help function -- already built in! just add documentation to commands within the cmd loop
     #write in story line
     #randomized monster?
 
@@ -314,27 +313,32 @@ class TextAdventureCmd(cmd.Cmd):
 
 
     def do_quit(self, arg):
+        """Quit the game."""
         global quit
         quit = 'True'
         return True
 
 
     def do_forward(self, arg):
+        """Move in the forward direction, if possible."""
         global user_input
         user_input = 'FORWARD'
         return True
 
     def do_back(self,arg):
+        """Move in the back direction, if possible."""
         global user_input
         user_input = 'BACK'
         return True
 
     def do_left(self, arg):
+        """Move in the left direction, if possible."""
         global user_input
         user_input = 'LEFT'
         return True
 
     def do_right(self, arg):
+        """Move in the right direction, if possible."""
         global user_input
         user_input = 'RIGHT'
         return True
@@ -348,6 +352,7 @@ class TextAdventureCmd(cmd.Cmd):
 
     #THIS IS WHERE I AM WORKING NEXT
     def do_look(self, item):
+        """look <item> - Look at an item within the room."""
         item = item.title()
 
         direct_name = worldRooms[location]['GROUND']
