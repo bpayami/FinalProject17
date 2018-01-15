@@ -312,10 +312,12 @@ class TextAdventureCmd(cmd.Cmd):
     def default(self, arg):
         print('I do not understand that command. Type "help" for a list of commands.')
 
-    """
+
     def do_quit(self, arg):
-        return True            #THIS WILL HAVE TO BE INCORPORATED INTO WHILE LOOP AS AN IF STATEMENT
-    """
+        global quit
+        quit = 'True'
+        return True
+
 
     def do_forward(self, arg):
         global user_input
@@ -405,7 +407,10 @@ while True:
 
         TextAdventureCmd().cmdloop()
 
-        global user_input
+        if quit == 'True':
+            print('\n\nThanks for playing!')
+            break
+
         if user_input == 'FORWARD' or 'BACK' or 'LEFT' or 'RIGHT':
             print(' \n \n')
             newlocation = worldRooms[location]['DOORS'][user_input]
@@ -430,6 +435,15 @@ while True:
         self.altnextTurn()
         print(' ')
         user_input = str(input('Which way would you like to go next? ')).upper()
+        if user_input not in ['FORWARD', 'BACK', 'LEFT', 'RIGHT']:
+            if user_input == 'F':
+                user_input = 'FORWARD'
+            if user_input == 'B':
+                user_input = 'BACK'
+            if user_input == 'L':
+                user_input = 'LEFT'
+            if user_input == 'R':
+                user_input = 'RIGHT'
         print(' \n \n')
         if prevlocation not in ['Main Hall from Wing A', 'Main Hall from Wing B', 'Main Hall from Wing C', 'Main Hall from Wing D']:
             name_5 = str(f'{location} from {prevlocation}')
