@@ -1,5 +1,5 @@
 #TO-DO LIST
-    #Pick up progress at line 362
+    #Pick up progress at line 362 (look function issue)
     #Fix long corridor in association with Wing D
     #Figure out locked closet and locked door -perhaps checks inventory for code or true/false for open/close
     #add something into class Room to print what objects are in the room (reference ground in dictionary) -- or just write into description
@@ -361,7 +361,7 @@ class TextAdventureCmd(cmd.Cmd):
             if item in indirect_name:
                 #convert short name to long name
                 official_name = 'whaaattttt?'   #NEXT PROBLEM TO ADDRESS -- short name in ALTNAMES need a way to ref back to its official name
-
+                                                #PERHAPS CHANGE FORMAT FROM DICTIONARY TO A CLASS
                 print(worldItems)
                 print('this is a short name')
 
