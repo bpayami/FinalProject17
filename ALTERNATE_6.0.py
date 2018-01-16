@@ -1,16 +1,17 @@
 #TO-DO LIST
     #Pick up progress at line 362 (look function issue)
     #Fix long corridor in association with Wing D
+    #secret attic
     #Figure out locked closet and locked door -perhaps checks inventory for code or true/false for open/close
     #add something into class Room to print what objects are in the room (reference ground in dictionary) -- or just write into description
-    #look function
-    #take function
-    #drop function
-    #eat function?
-    #use function?
-    #help function -- already built in! just add documentation to commands within the cmd loop
+    #ALL OF THESE WILL BE RATHER SIMPLE ONCE SHORT NAME / OFFICIAL NAME ISSUE IS RESOLVED
+        #take function
+        #drop function
+        #eat function?
+        #use function?
     #write in story line
     #randomized monster?
+    #perhaps have map printed in beginning? Have map print periodically?
 
 import cmd
 
@@ -200,16 +201,23 @@ worldWings = {
         'WEST': 'Study'}
     }
 
+currentItem = {}
+
 worldItems = {
+
     'Welcome Sign': {
         'DESC': 'welcome',
-        'ALTNAMES': ['Sign']},
+        'TAKEABLE': False,
+        'ALTNAMES': ['Sign', 'blank']},
     'Do Not Take This Sign Sign': {
-        'DESC': ''},
+        'DESC': '',
+        'TAKEABLE': True},
     'Map': {
-        'DESC': 'this describes the map'},
+        'DESC': 'this describes the map',
+        'TAKEABLE': True},
     'Shovel': {
-        'DESC': 'this describes the shovel'}
+        'DESC': 'this describes the shovel',
+        'TAKEABLE': False}
     }
 
 class Room(object):
@@ -356,6 +364,7 @@ class TextAdventureCmd(cmd.Cmd):
         item = item.title()
 
         direct_name = worldRooms[location]['GROUND']
+
         ground_objects = worldRooms[location]['GROUND']
         for n in ground_objects:
             indirect_name = worldItems[n]['ALTNAMES']
@@ -366,12 +375,40 @@ class TextAdventureCmd(cmd.Cmd):
             if item in direct_name:
                 print(worldItems[item]['DESC'])
             if item in indirect_name:
+
                 #convert short name to long name
-                official_name = 'whaaattttt?'   #NEXT PROBLEM TO ADDRESS -- short name in ALTNAMES need a way to ref back to its official name
+                official_name = (item.key()).key()   #NEXT PROBLEM TO ADDRESS -- short name in ALTNAMES need a way to ref back to its official name
+                print(official_name)
                                                 #PERHAPS CHANGE FORMAT FROM DICTIONARY TO A CLASS
-                print(worldItems)
+                #print(worldItems)
                 print('this is a short name')
 
+
+    def do_take(self, item):
+        """take <item> - Take an item within the room."""
+        item = item.title()
+
+        direct_name = worldRooms[location]['GROUND']
+        ground_objects = worldRooms[location]['GROUND']
+        for n in ground_objects:
+            indirect_name = worldItems[n]['ALTNAMES']
+
+        if item not in direct_name and item not in indirect_name:
+            print('That item is not here to take.')
+
+        if worldItems[direct_name]['TAKEABLE'] == False:
+                print('You can not take that item.')
+
+        else:
+            if item in direct_name:
+                inventory.append(item.lower())
+                print(f'The ' + item.lower() + ' has been added to your inventory')
+            if item in indirect_name:
+                print('this is not working quite yet')
+
+    def do_inventory(self, arg):
+        """This will show your current inventory"""
+        print(inventory)
 
 #Begginning Fancy Stuff
 title = 'I still have to think of a title'
@@ -384,6 +421,7 @@ print(' ')
 
 #prints turn for Start
 location = 'Start'
+inventory = []
 
 
 
@@ -463,80 +501,3 @@ while True:
     else:
         print('Sorry, you are unable to go in that direction.')
 
-
-
-
-"""
-while True:
-    if location != 'Wing A' or 'Wing B' or 'Wing C' or 'Wing D':
-        location = location
-        parameters = {
-            'start': Room(location, worldRooms[location]['DESC'], back=False, left=False, right=False),
-            'grandballroom': Room(location, worldRooms[location]['DESC'], front=False, back=False),
-            'somethingroom': Room(location, worldRooms[location]['DESC'], front=False, back=False),
-            'artgallery': Room(location, worldRooms[location]['DESC'], back=False, left=False, right=False),
-            'locked room': Room(location, worldRooms[location]['DESC'], back=False, left=False, right=False),
-            'study': Room(location, worldRooms[location]['DESC'], front=False, back=False),
-            'library': Room(location, worldRooms[location]['DESC'], front=False, back=False), #has special case of 'up'
-            'secretattic': Room(location, worldRooms[location]['DESC'], front=False, back=False, left=False, right=False), #ADD DOWN=FALSE TO CLASS
-            'kitchen': Room(location, worldRooms[location]['DESC'], back=False, left=False, right=False),
-            }
-        location_modified = location.lower()
-        if ' ' in (location_modified):
-            location_modified = location_modified.replace(" ", "")
-        self = parameters[location_modified]
-        self.nextTurn()
-        print(' ')
-        user_input = str(input('Where would you like to travel? ')).upper()
-        print(' ')
-        print(' ')
-        print(' ')
-        newlocation = worldRooms[location]['DOORS'][user_input]
-        prevlocation = location
-        location = newlocation
-    if location == 'Wing A' or 'Wing B' or 'Wing C' or 'Wing D':
-        location = location
-        parameters = {
-            'winga': Wing(location, worldWings[location]['DESC']),
-            'wingb': Wing(location, worldWings[location]['DESC']),
-            'wingc': Wing(location, worldWings[location]['DESC']),
-            'wingd': Wing(location, worldWings[location]['DESC'])
-            }
-        location_modified = location.lower()
-        if ' ' in (location_modified):
-            location_modified = location_modified.replace(" ", "")
-        self = parameters[location_modified]
-        self.altnextTurn()
-        print(' ')
-        user_input = str(input('Which way would you like to go next? ')).upper()
-        print(' ')
-        print(' ')
-        print(' ')
-        name_3 = str(f'{location} from {prevlocation}')
-        newlocation = worldRooms[name_3]['DOORS'][user_input]
-        prevlocation = location
-        location = newlocation
-    else:
-        print('Sorry, you are unable to go in that direction.')
-"""
-
-
-
-"""
-if location == 'Main Hall':
-        location = location         #location is Main Hall
-        parameters = {
-            'mainhallfromwinga': Room(location, worldRooms[location]['DESC'], front=False, back=False),
-            'mainhallfromwingb': Room(location, worldRooms[location]['DESC'], front=False, back=False),
-            'mainhallfromwingc': Room(location, worldRooms[location]['DESC'], front=False, back=False),
-            'mainhallfromwingd': Room(location, worldRooms[location]['DESC'], front=False, back=False)}
-        name_2 = str(f'{locaction} from {prevlocation}')
-        location = name_2
-        location_modified = (prevlocation.replace(" ", "")).lower()
-        print(location_modified)                                                   #JUST FOR REFERENCE -- DELETE LATER
-        print(location)
-        print('this is as far as ive gotten')
-        #newlocation = worldRooms[name_3]['DOORS'][user_input]                     #IDK IF I NEED THIS -- IT'S FROM BELOW
-        #prevlocation = location                                                   #I REALLY NEED TO TAKE NOTE OF HOW THE WINGS WORK
-        #location = newlocation
-"""
