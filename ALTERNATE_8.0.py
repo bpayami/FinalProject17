@@ -288,9 +288,10 @@ class Object(object):
         self.official = official
         self.desc = desc
         self.names = names
+        #current.takeable = takeable
 
 worldItems = [
-    Object('Welcome Sign', 'The sign reads...', ['sign', 'welcome sign', 'welcome', 'sign']),
+    Object('Welcome Sign', 'The sign reads...', ['sign', 'welcome sign', 'welcome', 'sign'], takeable=False),
     Object('Do Not Take This Sign Sign','this is a description', ['do not take this sign sign', 'sign']),
     Object('Map', 'this describes the map', ['map'])
     ]
@@ -367,6 +368,31 @@ class TextAdventureCmd(cmd.Cmd):
 
     def do_take(self, item):
         """take <item> - Take an item within the room."""
+
+        choice = item.lower()
+        current = ''
+
+        for item in worldItems:
+            if choice in item.names:
+                current = item
+
+        while True:
+            if choice not in item.names:
+                print('You do not see that item to take. x1')
+                break
+            if choice in item.names:
+                if current.official not in worldRooms[location]['GROUND']:
+                    print('You do not see that item to take. x2')
+                break
+            if current.takeable == False:
+                    print('You can not take this item.')
+            else:
+                inventory.append((str(current.official)).lower())
+                print('You have just added the item to your inventory.')
+                break
+
+
+        """
         item = item.title()
 
         direct_name = worldRooms[location]['GROUND']
@@ -386,6 +412,7 @@ class TextAdventureCmd(cmd.Cmd):
                 print(f'The ' + item.lower() + ' has been added to your inventory')
             if item in indirect_name:
                 print('this is not working quite yet')
+        """
 
     def do_inventory(self, arg):
         """This will show your current inventory"""
