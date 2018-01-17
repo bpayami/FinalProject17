@@ -3,8 +3,9 @@
     #Fix long corridor in association with Wing D
     #secret attic
     #Figure out locked closet and locked door -perhaps checks inventory for code or true/false for open/close
-    #add something into class Room to print what objects are in the room (reference ground in dictionary) -- or just write into description
+    #write objects into room descriptions
     #ALL OF THESE WILL BE RATHER SIMPLE ONCE SHORT NAME / OFFICIAL NAME ISSUE IS RESOLVED
+        #drop function
         #eat function?
         #use function?
         #print little commentaries for take, use, eat commands for certain objects (perhaps add into class as an addional desc and a contional statement if current.take desc: etc..
@@ -399,30 +400,17 @@ class TextAdventureCmd(cmd.Cmd):
             print('That item is not here to take.')
 
 
+    def do_drop(self, item):
+        """Drop <item> - Drop an item and remove it from your inventory."""
 
-    """
-    def do_take(self, item):
-        #""take <item> - Take an item within the room.""
-        item = item.title()
+        choice = item.title()
 
-        direct_name = worldRooms[location]['GROUND']
-        ground_objects = worldRooms[location]['GROUND']
-        for n in ground_objects:
-            indirect_name = worldItems[n]['ALTNAMES']
-
-        if item not in direct_name and item not in indirect_name:
-            print('That item is not here to take.')
-
-        if worldItems[direct_name]['TAKEABLE'] == False:
-                print('You can not take that item.')
-
+        if choice in inventory:
+            inventory.remove(choice)
+            print(inventory)
         else:
-            if item in direct_name:
-                inventory.append(item.lower())
-                print(f'The ' + item.lower() + ' has been added to your inventory')
-            if item in indirect_name:
-                print('this is not working quite yet')
-    """
+            print('You do not have that item in your inventory to remove.')
+
 
     def do_inventory(self, arg):
         """This will show your current inventory"""
