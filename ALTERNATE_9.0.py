@@ -5,10 +5,13 @@
     #Figure out locked closet and locked door -perhaps checks inventory for code or true/false for open/close
     #add something into class Room to print what objects are in the room (reference ground in dictionary) -- or just write into description
     #ALL OF THESE WILL BE RATHER SIMPLE ONCE SHORT NAME / OFFICIAL NAME ISSUE IS RESOLVED
-        #take function - started but fix
-        #drop function
         #eat function?
         #use function?
+        #print little commentaries for take, use, eat commands for certain objects (perhaps add into class as an addional desc and a contional statement if current.take desc: etc..
+            #EXAMPLES
+            #take glass - ow
+            #eat code - WHY WOULD YOU DO THAT YOU IDIOT??! I hope you have a good memory...
+            #etc.
     #write in story line
     #randomized monster?
     #perhaps have map printed in beginning? Have map print periodically?
@@ -282,9 +285,10 @@ class Object(object):
         self.official = official
         self.desc = desc
         self.names = names
+        self.takeable = takeable
 
 worldItems = [
-    Object('Welcome Sign', 'The sign reads...', ['welcome sign', 'welcome']),
+    Object('Welcome Sign', 'The sign reads...', ['welcome sign', 'welcome'], takeable=False),
     Object('Do Not Take This Sign Sign','this is a description', ['do not take this sign sign', 'sign']),
     Object('Map', 'this describes the map', ['map']),
     Object('Shattered Glass', 'this describes the glass', ['shattered glass', 'glass']),
@@ -365,6 +369,40 @@ class TextAdventureCmd(cmd.Cmd):
 
     def do_take(self, item):
         """take <item> - Take an item within the room."""
+
+        choice = item.lower()
+        current = ''
+
+        for item in worldItems:
+            if choice in item.names:
+                current = item
+            if choice not in item.names:
+                validity = 'no'
+
+        for item in worldItems:
+            if choice in item.names:
+                validity = 'yes'
+                current.validity = True
+
+        for item in worldItems:
+            if choice in item.names:
+                if current.official in worldRooms[location]['GROUND']:
+                    if current.takeable == True:
+                        inventory.append(current.official)
+                        print(f'"{current.official}" has been added to your inventory.')
+                    else:
+                        print('You can not take that item.')
+                if current.official not in worldRooms[location]['GROUND']:
+                    print('That item is not here to take.')
+
+        if validity != 'yes':
+            print('That item is not here to take.')
+
+
+
+    """
+    def do_take(self, item):
+        #""take <item> - Take an item within the room.""
         item = item.title()
 
         direct_name = worldRooms[location]['GROUND']
@@ -384,6 +422,7 @@ class TextAdventureCmd(cmd.Cmd):
                 print(f'The ' + item.lower() + ' has been added to your inventory')
             if item in indirect_name:
                 print('this is not working quite yet')
+    """
 
     def do_inventory(self, arg):
         """This will show your current inventory"""
