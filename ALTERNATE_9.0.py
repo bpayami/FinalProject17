@@ -17,8 +17,6 @@ import cmd
 
 def map():
     print("""
-
-
                                     +---------------+
                                     |               |
         T H E   M A P               |               |
@@ -60,7 +58,6 @@ def map():
                                     |               |
                                     |               |
                                     +---------------+
-
     """)
 
 worldRooms = {
@@ -200,12 +197,9 @@ worldWings = {
         'WEST': 'Study'}
     }
 
-currentItem = {}
-
 
 class Room(object):
     """Create a room object
-
     Each room is assumed to have four walls, with one possible door in each.
     Each wall will either have a door or not. No support for closed/open doors yet
     """
@@ -284,16 +278,17 @@ class Wing(object):
             break
 
 class Object(object):
-    def __init__(self, official, desc, names, takeable=True, edible=False):
+    def __init__(self, official, desc, names, takeable=True, edible=False, validity=False):
         self.official = official
         self.desc = desc
         self.names = names
-        #current.takeable = takeable
 
 worldItems = [
-    Object('Welcome Sign', 'The sign reads...', ['sign', 'welcome sign', 'welcome', 'sign'], takeable=False),
+    Object('Welcome Sign', 'The sign reads...', ['welcome sign', 'welcome']),
     Object('Do Not Take This Sign Sign','this is a description', ['do not take this sign sign', 'sign']),
-    Object('Map', 'this describes the map', ['map'])
+    Object('Map', 'this describes the map', ['map']),
+    Object('Shattered Glass', 'this describes the glass', ['shattered glass', 'glass']),
+    Object('Frame', 'this describes the frame', ['frame'])
     ]
 
 
@@ -303,13 +298,11 @@ class TextAdventureCmd(cmd.Cmd):
     def default(self, arg):
         print('I do not understand that command. Type "help" for a list of commands.')
 
-
     def do_quit(self, arg):
         """Quit the game."""
         global quit
         quit = 'True'
         return True
-
 
     def do_forward(self, arg):
         """Move in the forward direction, if possible."""
@@ -351,48 +344,27 @@ class TextAdventureCmd(cmd.Cmd):
         for item in worldItems:
             if choice in item.names:
                 current = item
-
-        while True:
             if choice not in item.names:
-                print('You do not see that item.')
-                break
+                validity = 'no'
+
+        for item in worldItems:
             if choice in item.names:
+                validity = 'yes'
+                current.validity = True
+
+        for item in worldItems:
+            if choice in item.names:
+                if current.official in worldRooms[location]['GROUND']:
+                    print(current.desc)
                 if current.official not in worldRooms[location]['GROUND']:
                     print('You do not see that item.')
-                break
-            else:
-                print(current.desc)
-                break
 
+        if validity != 'yes':
+            print('You do not see that item.')
 
 
     def do_take(self, item):
         """take <item> - Take an item within the room."""
-
-        choice = item.lower()
-        current = ''
-
-        for item in worldItems:
-            if choice in item.names:
-                current = item
-
-        while True:
-            if choice not in item.names:
-                print('You do not see that item to take. x1')
-                break
-            if choice in item.names:
-                if current.official not in worldRooms[location]['GROUND']:
-                    print('You do not see that item to take. x2')
-                break
-            if current.takeable == False:
-                    print('You can not take this item.')
-            else:
-                inventory.append((str(current.official)).lower())
-                print('You have just added the item to your inventory.')
-                break
-
-
-        """
         item = item.title()
 
         direct_name = worldRooms[location]['GROUND']
@@ -412,7 +384,6 @@ class TextAdventureCmd(cmd.Cmd):
                 print(f'The ' + item.lower() + ' has been added to your inventory')
             if item in indirect_name:
                 print('this is not working quite yet')
-        """
 
     def do_inventory(self, arg):
         """This will show your current inventory"""
@@ -426,8 +397,7 @@ print(' ')
 print('(Type "help" for commands.)')
 print(' ')
 
-
-#prints turn for Start
+#Beginning Conditions
 location = 'Start'
 inventory = []
 
@@ -508,4 +478,3 @@ while True:
 
     else:
         print('Sorry, you are unable to go in that direction.')
-
