@@ -4,6 +4,7 @@
     #secret attic
     #Figure out locked closet and locked door -perhaps checks inventory for code or true/false for open/close
     #write objects into room descriptions
+    #add fail safe for wing (input for which way would you like to go next)
     #ALL OF THESE WILL BE RATHER SIMPLE ONCE SHORT NAME / OFFICIAL NAME ISSUE IS RESOLVED
         #drop function
         #eat function?
@@ -287,13 +288,14 @@ class Object(object):
         self.desc = desc
         self.names = names
         self.takeable = takeable
+        self.edible = edible
 
 worldItems = [
     Object('Welcome Sign', 'The sign reads...', ['welcome sign', 'welcome'], takeable=False),
     Object('Do Not Take This Sign Sign','this is a description', ['do not take this sign sign', 'sign']),
     Object('Map', 'this describes the map', ['map']),
     Object('Shattered Glass', 'this describes the glass', ['shattered glass', 'glass']),
-    Object('Frame', 'this describes the frame', ['frame'])
+    Object('Frame', 'this describes the frame', ['frame'], edible=True)
     ]
 
 
@@ -410,6 +412,72 @@ class TextAdventureCmd(cmd.Cmd):
             print(inventory)
         else:
             print('You do not have that item in your inventory to remove.')
+
+
+    def do_eat(self, item):
+        """Eat <item> - Eat an item that is in your inventory."""
+
+        #from take function
+        choice = item.lower()
+        current = ''
+
+        for item in worldItems:
+            if choice in item.names:
+                current = item
+
+        if choice.title() in inventory:
+            if current.edible == True:
+                inventory.remove(choice.title())
+                print(f'You just ate "{choice}."')
+            else:
+                print('You can not eat that item.')
+        else:
+            print('That item is not in your inventory to eat.')
+
+        """
+        for item in worldItems:
+            if choice in item.names:
+                validity = 'yes'
+                current.validity = True
+
+        for item in worldItems:
+            if choice in item.names:
+                if current.official in worldRooms[location]['GROUND']:
+                    if current.takeable == True:
+                        inventory.append(current.official)
+                        print(f'"{current.official}" has been added to your inventory.')
+                    else:
+                        print('You can not take that item.')
+                if current.official not in worldRooms[location]['GROUND']:
+                    print('That item is not here to take.')
+
+        if validity != 'yes':
+            print('That item is not here to take.')
+
+
+        #From drop function
+        choice = item.title()
+
+        if choice in inventory:
+            inventory.remove(choice)
+            print(inventory)
+        else:
+            print('You do not have that item in your inventory to remove.')
+        """
+
+        """
+        choice = item.lower()
+        current = ''
+
+        if choice in inventory:
+            if current.eatable == True:
+                inventory.remove(choice)
+                print(f'You just ate "{choice.lower()}."')
+            else:
+                print('You can not eat that item.')
+        else:
+            print('That item is not in your inventory to eat.')
+        """
 
 
     def do_inventory(self, arg):
