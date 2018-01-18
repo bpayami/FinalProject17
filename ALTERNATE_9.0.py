@@ -11,6 +11,12 @@
                     #etc.
     #CHANGING ROOMS
         #fix long corridor (coming from Wing D)
+            #add in as a parameter
+            #skip being in the long corridor but just have it go directly to the locked doors
+                #perhaps a way to print a different name at top?
+            #figure out a way to incorporate locked / unlocked
+            #work in back option to return to wing D
+            #NOTE: perhaps treat the entire thing like a wing... __wing_d__ from long corridor
         #secret attic
         #add fail safe for wing choices (input for which way would you like to go next)
     #GAME ENDING
@@ -18,6 +24,9 @@
             #check inventory for code/key?
             #true/false for open/close?
             #user inputed code sequence?
+        #figure out once inside room
+        #figure out ending message
+        #animated banner?
     #MISC.
         #incorporate good use of map!!
         #randomized monster?
