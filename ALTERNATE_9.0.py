@@ -6,10 +6,8 @@
     #write objects into room descriptions
     #add fail safe for wing (input for which way would you like to go next)
     #ALL OF THESE WILL BE RATHER SIMPLE ONCE SHORT NAME / OFFICIAL NAME ISSUE IS RESOLVED
-        #drop function
-        #eat function?
         #use function?
-        #print little commentaries for take, use, eat commands for certain objects (perhaps add into class as an addional desc and a contional statement if current.take desc: etc..
+        #print little commentaries for take, use, eat commands for certain objects (perhaps add into class as an addional desc and a contional statement if current.takeDesc != '': print(current.takeDesc etc..
             #EXAMPLES
             #take glass - ow
             #eat code - WHY WOULD YOU DO THAT YOU IDIOT??! I hope you have a good memory...
@@ -283,19 +281,20 @@ class Wing(object):
             break
 
 class Object(object):
-    def __init__(self, official, desc, names, takeable=True, edible=False, validity=False):
+    def __init__(self, official, desc, names, takeable=True, edible=False, usable=False, validity=False):
         self.official = official
         self.desc = desc
         self.names = names
         self.takeable = takeable
         self.edible = edible
+        self.usable = usable
 
 worldItems = [
     Object('Welcome Sign', 'The sign reads...', ['welcome sign', 'welcome'], takeable=False),
     Object('Do Not Take This Sign Sign','this is a description', ['do not take this sign sign', 'sign']),
     Object('Map', 'this describes the map', ['map']),
-    Object('Shattered Glass', 'this describes the glass', ['shattered glass', 'glass']),
-    Object('Frame', 'this describes the frame', ['frame'], edible=True)
+    Object('Shattered Glass', 'this describes the glass', ['shattered glass', 'glass'], edible=True, usable=True),
+    Object('Frame', 'this describes the frame', ['frame'])
     ]
 
 
@@ -403,7 +402,7 @@ class TextAdventureCmd(cmd.Cmd):
 
 
     def do_drop(self, item):
-        """Drop <item> - Drop an item and remove it from your inventory."""
+        """drop <item> - Drop an item and remove it from your inventory."""
 
         choice = item.title()
 
@@ -415,7 +414,7 @@ class TextAdventureCmd(cmd.Cmd):
 
 
     def do_eat(self, item):
-        """Eat <item> - Eat an item that is in your inventory."""
+        """eat <item> - Eat an item that is in your inventory."""
 
         #from take function
         choice = item.lower()
@@ -433,6 +432,27 @@ class TextAdventureCmd(cmd.Cmd):
                 print('You can not eat that item.')
         else:
             print('That item is not in your inventory to eat.')
+
+
+    def do_use(self, item):
+        """use <item> - Use an item that is in your inventory."""
+
+        #from take function
+        choice = item.lower()
+        current = ''
+
+        for item in worldItems:
+            if choice in item.names:
+                current = item
+
+        if choice.title() in inventory:
+            if current.usable == True:
+                inventory.remove(choice.title())
+                print(f'You just used your "{choice}."')
+            else:
+                print('You can not use that item.')
+        else:
+            print('That item is not in your inventory to use.')
 
 
     def do_inventory(self, arg):
