@@ -1,20 +1,26 @@
 #TO-DO LIST
-    #finish list of objects
-    #Fix long corridor in association with Wing D
-    #secret attic
-    #Figure out locked closet and locked door -perhaps checks inventory for code or true/false for open/close
-    #write objects into room descriptions
-    #add fail safe for wing (input for which way would you like to go next)
-    #ALL OF THESE WILL BE RATHER SIMPLE ONCE SHORT NAME / OFFICIAL NAME ISSUE IS RESOLVED
-        #use function?
-        #print little commentaries for take, use, eat commands for certain objects (perhaps add into class as an addional desc and a contional statement if current.takeDesc != '': print(current.takeDesc etc..
-            #EXAMPLES
-            #take glass - ow
-            #eat code - WHY WOULD YOU DO THAT YOU IDIOT??! I hope you have a good memory...
-            #etc.
-    #write in story line
-    #randomized monster?
-    #perhaps have map printed in beginning? Have map print periodically?
+    #GAME CONTENT
+        #fill in all parameters into worldRooms dictionary
+        #write objects into room descriptions
+        #finish list of objects
+        #print little commentaries for take, use, eat commands for certain objects
+            #perhaps add into class as an addional desc and a contional statement if current.takeDesc != '': print(current.takeDesc) etc..
+                #EXAMPLES
+                    #take glass - ow
+                    #eat code - WHY WOULD YOU DO THAT YOU IDIOT??! I hope you have a good memory...
+                    #etc.
+    #CHANGING ROOMS
+        #fix long corridor (coming from Wing D)
+        #secret attic
+        #add fail safe for wing choices (input for which way would you like to go next)
+    #GAME ENDING
+        #figure out locked closet and locked door
+            #check inventory for code/key?
+            #true/false for open/close?
+            #user inputed code sequence?
+    #MISC.
+        #incorporate good use of map!!
+        #randomized monster?
 
 import cmd
 
