@@ -549,8 +549,8 @@ while True:
                 user_input = 'LEFT'
             if user_input == 'R':
                 user_input = 'RIGHT'
-            else:
-                user_input = str(input('Sorry, you can\'t go that way.  Which way would you like to go next? ')).upper()
+            if user_input not in ['FORWARD', 'BACK', 'LEFT', 'RIGHT']:
+                user_input = str(input('\nSorry, you can\'t go that way.  Which way would you like to go next? ')).upper()
                 if user_input not in ['FORWARD', 'BACK', 'LEFT', 'RIGHT']:
                     if user_input == 'F':
                         user_input = 'FORWARD'
