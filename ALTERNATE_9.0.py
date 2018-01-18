@@ -434,51 +434,6 @@ class TextAdventureCmd(cmd.Cmd):
         else:
             print('That item is not in your inventory to eat.')
 
-        """
-        for item in worldItems:
-            if choice in item.names:
-                validity = 'yes'
-                current.validity = True
-
-        for item in worldItems:
-            if choice in item.names:
-                if current.official in worldRooms[location]['GROUND']:
-                    if current.takeable == True:
-                        inventory.append(current.official)
-                        print(f'"{current.official}" has been added to your inventory.')
-                    else:
-                        print('You can not take that item.')
-                if current.official not in worldRooms[location]['GROUND']:
-                    print('That item is not here to take.')
-
-        if validity != 'yes':
-            print('That item is not here to take.')
-
-
-        #From drop function
-        choice = item.title()
-
-        if choice in inventory:
-            inventory.remove(choice)
-            print(inventory)
-        else:
-            print('You do not have that item in your inventory to remove.')
-        """
-
-        """
-        choice = item.lower()
-        current = ''
-
-        if choice in inventory:
-            if current.eatable == True:
-                inventory.remove(choice)
-                print(f'You just ate "{choice.lower()}."')
-            else:
-                print('You can not eat that item.')
-        else:
-            print('That item is not in your inventory to eat.')
-        """
-
 
     def do_inventory(self, arg):
         """This will show your current inventory"""
