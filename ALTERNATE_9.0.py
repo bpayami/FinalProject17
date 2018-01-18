@@ -18,7 +18,6 @@
             #work in back option to return to wing D
             #NOTE: perhaps treat the entire thing like a wing... __wing_d__ from long corridor
         #secret attic
-        #add fail safe for wing choices (input for which way would you like to go next)
     #GAME ENDING
         #figure out locked closet and locked door
             #check inventory for code/key?
@@ -550,6 +549,17 @@ while True:
                 user_input = 'LEFT'
             if user_input == 'R':
                 user_input = 'RIGHT'
+            else:
+                user_input = str(input('Sorry, you can\'t go that way.  Which way would you like to go next? ')).upper()
+                if user_input not in ['FORWARD', 'BACK', 'LEFT', 'RIGHT']:
+                    if user_input == 'F':
+                        user_input = 'FORWARD'
+                    if user_input == 'B':
+                        user_input = 'BACK'
+                    if user_input == 'L':
+                        user_input = 'LEFT'
+                    if user_input == 'R':
+                        user_input = 'RIGHT'
         print(' \n \n')
         if prevlocation not in ['Main Hall from Wing A', 'Main Hall from Wing B', 'Main Hall from Wing C', 'Main Hall from Wing D']:
             name_5 = str(f'{location} from {prevlocation}')
