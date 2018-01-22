@@ -10,15 +10,14 @@
                     #eat code - WHY WOULD YOU DO THAT YOU IDIOT??! I hope you have a good memory...
                     #etc.
     #CHANGING ROOMS
-        #secret attic
-        #locked closet -- PICK UP PROGRESS AT LINE 581!!!
-        #get rid of parameters completely for worldWings and if wings in while loop for simplification purposes?
+        #all tasks complete :)
     #GAME ENDING
         #figure out once inside room
         #figure out ending message
         #animated banner?
     #MISC.
         #incorporate good use of map!!
+        #slow type of 'processing'
         #randomized monster?
 
 import cmd
@@ -182,17 +181,6 @@ worldRooms = {
         'DOORS': {'BACK': 'Wing B'},
         'DESC': ''},
     }
-
-"""
-    'Locked Closet': {                            #GET RID OF THIS
-        'DOORS': {'FORWARD': 'Wing C'},
-        'DESC': '',
-        'SHOP': [''],
-        'GROUND': ['Code Sequence #2', 'Shop Howto']},
-    'Wing C from Locked Closet': {
-        'DOORS': {'FORWARD': 'Main Hall', 'BACK': 'Locked Closet', 'LEFT': 'Something Room', 'RIGHT': 'Library'},
-        'DESC': ''},
-"""
 
 worldWings = {
     'Wing A': {
@@ -551,10 +539,14 @@ while True:
 
         finalRoom = Room(location, worldRooms[location]['DESC'], front=False, back=False, left=False, right=False, locked=True)
         fr = finalRoom
+        end = ''
         if fr.locked == True:
             if 'Code #1' and 'Code #2' in inventory:
                 print('Congratulations!  You have found both of the code sequences! Enter "look codes" to see the sequences again.')
                 while True:
+                    if end == True:
+                        quit = 'True'
+                        continue
                     displayCodes = (input(f'{inventory} \n\n> ')).lower()
                     if displayCodes == 'look codes':
                         print("""     * Code #1 -- 42 72 69 65 6c 6c 61\n     * Code #2 -- 41 70 72 69 6c""")
@@ -566,6 +558,7 @@ while True:
                                 if code2 == '41 70 72 69 6c':
                                     print('   processing...\n   processing...\n')
                                     print('You\'ve entered the proper codes to escape!!\nto be continued...')
+                                    end = True
                                     break
                                 else:
                                     print('Hmm... you must have entered the code wrong.  Try entering it again.\n')
