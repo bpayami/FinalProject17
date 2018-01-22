@@ -103,14 +103,6 @@ worldRooms = {
     'Wing B from Art Gallery': {
         'DOORS': {'FORWARD': 'Main Hall', 'BACK': 'Art Gallery', 'LEFT': 'Study', 'RIGHT': 'Grand Ballroom'},
         'DESC': ''},
-    'Locked Closet': {
-        'DOORS': {'FORWARD': 'Wing C'},
-        'DESC': '',
-        'SHOP': [''],
-        'GROUND': ['Code Sequence #2', 'Shop Howto']},
-    'Wing C from Locked Closet': {
-        'DOORS': {'FORWARD': 'Main Hall', 'BACK': 'Locked Closet', 'LEFT': 'Something Room', 'RIGHT': 'Library'},
-        'DESC': ''},
     'Study': {
         'DOORS': {'LEFT': 'Wing D', 'RIGHT': 'Wing B'},
         'DESC': '',
@@ -168,6 +160,15 @@ worldRooms = {
     'Wing D from Main Hall': {
         'DOORS': {'FORWARD': 'Kitchen', 'LEFT': 'Study', 'RIGHT': 'Library'},
         'DESC': ''},
+    'Locked Closet': {
+        'DOORS': {'FORWARD': 'Locked Room', 'BACK': 'Wing C'},
+        'DESC': 'This room is locked and you need a key to enter.'},
+    'Locked Room': {
+        'DOORS': {'FORWARD': 'Wing C'},
+        'DESC': ''},
+    'Wing C from Locked Closet': {
+        'DOORS': {'FORWARD': 'Main Hall', 'LEFT': 'Something Room', 'RIGHT': 'Library', 'BACK': 'Locked Room'},
+        'DESC': ''},
     'Long Corridor': {
         'DOORS': {'FORWARD': 'Final Room', 'BACK': 'Wing D'},
         'DESC': ''},
@@ -177,10 +178,21 @@ worldRooms = {
     'Locked Doors': {
         'DOORS': {'FORWARD': 'Final Room', 'BACK': 'Wing D'},
         'DESC': ''},
-    'Final Room': {
+    'Final Room': {                         #DO I NEED THIS????
         'DOORS': {'BACK': 'Wing B'},
         'DESC': ''},
     }
+
+"""
+    'Locked Closet': {                            #GET RID OF THIS
+        'DOORS': {'FORWARD': 'Wing C'},
+        'DESC': '',
+        'SHOP': [''],
+        'GROUND': ['Code Sequence #2', 'Shop Howto']},
+    'Wing C from Locked Closet': {
+        'DOORS': {'FORWARD': 'Main Hall', 'BACK': 'Locked Closet', 'LEFT': 'Something Room', 'RIGHT': 'Library'},
+        'DESC': ''},
+"""
 
 worldWings = {
     'Wing A': {
@@ -216,11 +228,11 @@ class Room(object):
     Each wall will either have a door or not. No support for closed/open doors yet
     """
 
-    def __init__(self, name, front=True, back=True, left=True, right=True, locked=False):
+    def __init__(self, name, desc, front=True, back=True, left=True, right=True, locked=False):
         self.name = name
         self.exception = 'Main Hall'
         self.walls = {'front': front, 'back': back, 'left': left, 'right': right}
-        self.desc = worldRooms[location]['DESC']
+        self.desc = desc
         self.locked = locked
 
 
@@ -482,11 +494,11 @@ title = 'I still have to think of a title'
 print(title)
 print(f'=' * len(title))
 print(' ')
-print('(Type "help" for commands.)')
+print('(Type "help" for commands.)\n')
 
 #Beginning Conditions
 location = 'Start'
-inventory = []
+inventory = ['Code #1', 'Key']
 
 
 
@@ -494,22 +506,23 @@ while True:
     if location != 'Wing A' or 'Wing B' or 'Wing C' or 'Wing D':
         location = location
         parameters = {
-            'start': Room(location, back=False, left=False, right=False),
-            'grandballroom': Room(location, front=False, back=False),
-            'somethingroom': Room(location, front=False, back=False),
-            'artgallery': Room(location, back=False, left=False, right=False),
-            'locked room': Room(location, back=False, left=False, right=False),
-            'study': Room(location, front=False, back=False),
-            'library': Room(location, front=False, back=False), #has special case of 'up'
-            'secretattic': Room(location, front=False, back=False, left=False, right=False), #ADD DOWN=FALSE TO CLASS
-            'kitchen': Room(location, back=False, left=False, right=False),
-            'longcorridor': Room('Locked Doors', left=False, right=False),
-            'lockeddoors': Room(location, left=False, right=False),
-            'finalroom': Room(location, front=False, back=False, left=False, right=False, locked=True),
-            'mainhallfromwinga': Room(location, front=False, back=False),
-            'mainhallfromwingb': Room(location, front=False, back=False),
-            'mainhallfromwingc': Room(location, front=False, back=False),
-            'mainhallfromwingd': Room(location, front=False, back=False)}
+            'start': Room(location, worldRooms[location]['DESC'], back=False, left=False, right=False),
+            'grandballroom': Room(location, worldRooms[location]['DESC'], front=False, back=False),
+            'somethingroom': Room(location, worldRooms[location]['DESC'], front=False, back=False),
+            'artgallery': Room(location, worldRooms[location]['DESC'], back=False, left=False, right=False),
+            'locked room': Room(location, worldRooms[location]['DESC'], back=False, left=False, right=False),
+            'study': Room(location, worldRooms[location]['DESC'], front=False, back=False),
+            'library': Room(location, worldRooms[location]['DESC'], front=False, back=False), #has special case of 'up'
+            'secretattic': Room(location, worldRooms[location]['DESC'], front=False, back=False, left=False, right=False), #ADD DOWN=FALSE TO CLASS
+            'kitchen': Room(location, worldRooms[location]['DESC'], back=False, left=False, right=False),
+            'longcorridor': Room('Locked Doors', worldRooms[location]['DESC'], left=False, right=False),
+            'lockedcloset': Room(location, worldRooms[location]['DESC'], left=False, right=False),
+            #'lockeddoors': Room(location, worldRooms[location]['DESC'], left=False, right=False),
+            #'finalroom': Room(location, worldRooms[location]['DESC'], front=False, back=False, left=False, right=False, locked=True),
+            'mainhallfromwinga': Room(location, worldRooms[location]['DESC'], front=False, back=False),
+            'mainhallfromwingb': Room(location, worldRooms[location]['DESC'], front=False, back=False),
+            'mainhallfromwingc': Room(location, worldRooms[location]['DESC'], front=False, back=False),
+            'mainhallfromwingd': Room(location, worldRooms[location]['DESC'],front=False, back=False)}
         location_modified = location.lower()
         if ' ' in (location_modified):
             location_modified = location_modified.replace(" ", "")
@@ -570,43 +583,38 @@ while True:
                 prevlocation = 'Long Corridor'
                 location = 'Wing D'
 
-    if location == 'Locked Closet':
+
+    if location == 'Locked Room':
         print(location)
         print("=" * len(location))
+
 
         lockedCloset = Room(location, worldRooms[location]['DESC'], front=False, back=False, left=False, right=False, locked=True)
         lc = lockedCloset
         if lc.locked == True:
-            if 'Key' in inventory:
-                print('Congratulations!  You have found both of the code sequences! Enter "look codes" to see the sequences again.')
-                while True:
-                    displayCodes = (input(f'{inventory} \n\n> ')).lower()
-                    if displayCodes == 'look codes':
-                        print("""     * Code #1 -- 42 72 69 65 6c 6c 61\n     * Code #2 -- 41 70 72 69 6c""")
-                        while True:
-                            code1 = input('\nEnter code sequence #1:  ')
-                            if code1 == '42 72 69 65 6c 6c 61':
-                                print('   processing...\n   processing...\n')
-                                code2 = input('Enter code sequence #2:  ')
-                                if code2 == '41 70 72 69 6c':
-                                    print('   processing...\n   processing...\n')
-                                    print('You\'ve entered the proper codes to escape!!\nto be continued...')
-                                    break
-                                else:
-                                    print('Hmm... you must have entered the code wrong.  Try entering it again.\n')
-                                    continue
-                            else:
-                                print('Hmm... you must have entered the code wrong.  Try entering it again.\n')
-                                continue
-
+            useKey = (input('You need to use a key to unlock this door. Type "use key" to use your key and enter the room. \n\n> ')).lower()
+            while True:
+                if useKey == 'use key':
+                    if 'Key' in inventory:
+                        print(f'\n\n{location}')
+                        print("=" * len(location))
+                        print('You have unlocked the door and entered the room!\n')
+                        lc.desc
+                        print(f'\nForward: '+ worldRooms[location]['DOORS']['FORWARD'])
+                        prevlocation = 'Locked Closet'
+                        location = 'Wing C'
+                        TextAdventureCmd().cmdloop()
+                        print('\n\n')
+                        break
                     else:
-                        print('\nSorry, I don\'t recognize that command.  Try entering "look codes" again.')
-                        continue
+                        print('This room is locked and you are unable to enter without the key. Keep looking for the key!\n')
+                        prevlocation = 'Locked Closet'
+                        location = 'Wing C'
+                        break
 
-            else:
-                print('This room is locked and you are unable to enter without the key. Look for a key to open the door.\n')
-                prevlocation = 'Locked Closet'
-                location = 'Wing C'
+                else:
+                    useKey = (input('\nSorry, I don\'t recognize that command.  Try entering "use key" again. \n\n> ')).lower()
+                    continue
 
 
     if location == 'Wing A' or 'Wing B' or 'Wing C' or 'Wing D':
@@ -656,3 +664,4 @@ while True:
 
     else:
         print('Sorry, you are unable to go in that direction.')
+
