@@ -1,14 +1,14 @@
 #TO-DO LIST
     #GAME CONTENT
         #fill in all parameters into worldRooms dictionary
+        #IDEAS
+            #in study -- wait... what's that on the desk?? is that the DBQ's from freshmen year that Mr. McMenamin STILL hasn't graded?? What's going on here?!?
         #write objects into room descriptions (and move sample items into proper rooms)
         #finish list of objects
-        #print little commentaries for take, use, eat commands for certain objects
-            #perhaps add into class as an addional desc and a contional statement if current.takeDesc != '': print(current.takeDesc) etc..
-                #EXAMPLES
-                    #take glass - ow
-                    #eat code - WHY WOULD YOU DO THAT YOU IDIOT??! I hope you have a good memory...
-                    #etc.
+        #commentaries for take, use, eat, etc. for certain objects
+            #EXAMPLES
+                #take glass - ow
+                #eat code - WHY WOULD YOU DO THAT YOU IDIOT??! I hope you have a good memory...
     #CHANGING ROOMS
         #all tasks complete :)
     #GAME ENDING
@@ -16,12 +16,12 @@
         #figure out ending message
         #animated banner?
     #MISC.
-        #incorporate good use of map!!
         #slow type of 'processing'
         #randomized monster?
 
 import cmd
 
+#visual 'map' of the game that the user can call to see from within the cmd loop
 def map():
     print("""
                                     +---------------+
@@ -67,11 +67,12 @@ def map():
                                     +---------------+
     """)
 
+#
 worldRooms = {
     'Start': {
         'DOORS': {'FORWARD': 'Wing A'},
-        'DESC': 'You wake up in a room with no memory of how you got there. ...',
-        'GROUND': ['Welcome Sign', 'Code #1']},
+        'DESC': 'You wake up in a room with no memory of how you got there. The last thing you remember was freaking over midterms -- so how did you end up here?  \nYou see a sign on the other side of the room-- Hmmm... you wonder what it says',
+        'GROUND': ['Welcome Sign', 'Code #1', 'Thing']},
     'Wing A from Start': {
         'DOORS': {'FORWARD': 'Main Hall', 'BACK': 'Start', 'LEFT': 'Grand Ballroom', 'RIGHT': 'Something Room'},
         'DESC': ''},
@@ -291,20 +292,25 @@ class Wing(object):
             break
 
 class Object(object):
-    def __init__(self, official, desc, names, takeable=True, edible=False, usable=False, validity=False):
+    def __init__(self, official, desc, names, takemg='', dropmg = '', eatmg='', takeable=True, edible=False, usable=False, validity=False, lookdeadly=False, takedeadly=False):
         self.official = official
         self.desc = desc
         self.names = names
+        self.takemg = takemg
+        self.dropmg = dropmg
+        self.eatmg = eatmg
         self.takeable = takeable
         self.edible = edible
         self.usable = usable
+        self.lookdeadly = lookdeadly
+        self.takedeadly = takedeadly
 
 worldItems = [
     Object('Welcome Sign', 'The sign reads...', ['welcome sign', 'welcome'], takeable=False),
     Object('Do Not Take This Sign Sign','this is a description', ['do not take this sign sign', 'sign']),
-    Object('Map', 'this describes the map', ['map']),
+    Object('Thing', 'this describes the thing', ['thing'], takemg='why would you take this random thing?', dropmg='why would u drop ur special thing?', edible=True, eatmg='why woluld you eat your thing?', lookdeadly=True, takedeadly=True),
     Object('Shattered Glass', 'this describes the glass', ['shattered glass', 'glass'], edible=True, usable=True),
-    Object('Frame', 'this describes the frame', ['frame']),
+    Object('Frame', 'this describes the frame', ['frame'], lookdeadly=True),
     Object('Code #1', 'this describes the first piece of code', ['code #1', 'piece of code', 'code (1/2)']),
     Object('Code #2', 'this describes the second piece of code', ['code #2', 'piece of code', 'code'])
     ]
@@ -355,6 +361,7 @@ class TextAdventureCmd(cmd.Cmd):
 
     def do_look(self, item):
         """look <item> - Look at an item within the room."""
+        global endgame
 
         choice = item.lower()
         current = ''
@@ -374,6 +381,9 @@ class TextAdventureCmd(cmd.Cmd):
             if choice in item.names:
                 if current.official in worldRooms[location]['GROUND']:
                     print(current.desc)
+                    if current.lookdeadly == True:
+                        endgame = 'True'
+                        return True
                 if current.official not in worldRooms[location]['GROUND']:
                     print('You do not see that item.')
 
@@ -383,6 +393,7 @@ class TextAdventureCmd(cmd.Cmd):
 
     def do_take(self, item):
         """take <item> - Take an item within the room."""
+        global endgame
 
         choice = item.lower()
         current = ''
@@ -402,8 +413,14 @@ class TextAdventureCmd(cmd.Cmd):
             if choice in item.names:
                 if current.official in worldRooms[location]['GROUND']:
                     if current.takeable == True:
+                        if current.takedeadly == True:
+                            print(current.takemg)
+                            endgame = 'True'
+                            return True
                         inventory.append(current.official)
                         print(f'"{current.official}" has been added to your inventory.')
+                        if current.takemg != '':
+                            print(current.takemg)
                     else:
                         print('You can not take that item.')
                 if current.official not in worldRooms[location]['GROUND']:
@@ -417,10 +434,17 @@ class TextAdventureCmd(cmd.Cmd):
         """drop <item> - Drop an item and remove it from your inventory."""
 
         choice = item.title()
+        current = ''
+
+        for item in worldItems:
+            if choice.lower() in item.names:
+                current = item
 
         if choice in inventory:
             inventory.remove(choice)
             print(inventory)
+            if current.dropmg != '':
+                print(current.dropmg)
         else:
             print('You do not have that item in your inventory to remove.')
 
@@ -428,7 +452,6 @@ class TextAdventureCmd(cmd.Cmd):
     def do_eat(self, item):
         """eat <item> - Eat an item that is in your inventory."""
 
-        #from take function
         choice = item.lower()
         current = ''
 
@@ -440,6 +463,8 @@ class TextAdventureCmd(cmd.Cmd):
             if current.edible == True:
                 inventory.remove(choice.title())
                 print(f'You just ate "{choice}."')
+                if current.eatmg != '':
+                    print(current.eatmg)
             else:
                 print('You can not eat that item.')
         else:
@@ -487,7 +512,7 @@ print('(Type "help" for commands.)\n')
 #Beginning Conditions
 location = 'Start'
 inventory = ['Code #1', 'Key']
-
+endgame = ''
 
 
 while True:
@@ -521,6 +546,10 @@ while True:
 
         if quit == 'True':
             print('\n\nThanks for playing!')
+            break
+
+        if endgame == 'True':
+            print('\n\nThanks for playing -- try again')
             break
 
         if user_input == 'FORWARD' or 'BACK' or 'LEFT' or 'RIGHT':
