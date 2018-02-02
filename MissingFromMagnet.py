@@ -1,17 +1,3 @@
-#TO-DO LIST
-    #GAME CONTENT
-        #change nowakowski cookbook name
-    #GAME ENDING
-        #figure out ending message
-    #GRADING
-        #finish adding comments
-    #MISC.
-        #slow type of 'processing'
-        #bug test!
-        #http://copy.r74n.com/ascii-art
-        #http://www.chris.com/ascii/
-
-
 
 import cmd
 
@@ -550,7 +536,7 @@ print("""
 
 #Beginning Conditions
 location = 'Start'
-inventory = ['Key', 'Code #1', 'Code #2']
+inventory = []
 endgame = ''
 
 
@@ -564,6 +550,8 @@ def slow_type(t):
         time.sleep(random.random()*10.0/typing_speed)
 
 
+#MASTER WHILE LOOP THAT ALLOWS FOR THE GAME TO BE ENDED
+    #contains 4 main conditions: if the next location is any regular room, if it is a wing, if it is the locked room, or if it is the final room
 while True:
     if location != 'Wing A' or 'Wing B' or 'Wing C' or 'Wing D':
         location = location
@@ -583,33 +571,42 @@ while True:
             'mainhallfromwingb': Room(location, worldRooms[location]['DESC'], front=False, back=False),
             'mainhallfromwingc': Room(location, worldRooms[location]['DESC'], front=False, back=False),
             'mainhallfromwingd': Room(location, worldRooms[location]['DESC'],front=False, back=False)}
-        location_modified = location.lower()
-        if ' ' in (location_modified):
-            location_modified = location_modified.replace(" ", "")
+        #this section of code is to convert the official room name to match the keys in the parameter dictionary
+        location_modified = location.lower()                                    #makes it lower case
+        if ' ' in (location_modified):                                          #checks for a space in the words
+            location_modified = location_modified.replace(" ", "")              #and if so, removes it
         self = parameters[location_modified]
-        self.nextTurn()
+        self.nextTurn()                                                         #prints the total description of the next room by calling the Room class
 
+        #enters the player back into the command loop
         TextAdventureCmd().cmdloop()
 
+        #if the player inputted quit, the game is ended
         if quit == 'True':
             print('\n\nThanks for playing!')
             break
 
+        #if either an item was deadly to look at or take, endgame will equal 'True' here and the game will be ended
         if endgame == 'True':
             print('\nThanks for playing -- try again')
             break
 
+        #when the user inputs either forward, back, left, or right the command loop is exited and is checked here where the current, new, and previous location variables are set
+            #then when it runs through the loop again, based on the location, the proper code will be run
         if user_input == 'FORWARD' or 'BACK' or 'LEFT' or 'RIGHT':
             print(' \n \n')
             newlocation = worldRooms[location]['DOORS'][user_input]
             prevlocation = location
             location = newlocation
 
+        #default message if user input is not valid
         else:
             print('Sorry, I don\'t recognize that command.  Enter "help" for the list of commands.')
 
 
+    #special case of code for the final room which requires two codes to unlock
     if location == 'Final Room':
+        #prints name of room
         print(location)
         print("=" * len(location))
 
@@ -617,7 +614,9 @@ while True:
         fr = finalRoom
         end = ''
         if fr.locked == True:
+            #checks if the player has found and taken both codes
             if 'Code #1' and 'Code #2' in inventory:
+                #asks player to enter look codes which displays the codes for convenience
                 print('Congratulations!  You have found both of the code sequences! Enter "look codes" to see the sequences again.')
                 while True:
                     if end == True:
@@ -636,99 +635,115 @@ while True:
                                     print("""
 
 
+                                               .*********        .****.         .*  ...
+                                              .***  ..****.      ******        .*****.
+          **************.                     .***      .***    .** ***        *****
+       *********..  ..*****.                   ****      ****    *****.      .****.                    *...
+     *******.            .****                   ******...***. .*****.     .****.           .***     .****
+        **.                .***.                   .***************..********..             .***    *****
+        .                    .***.                       ****                               .**. .*****
+               .*****.         ****                     .***.                     .****************.
+            .**********.        .***.                  .****                    .*******....***.      ..
+          .****.   *****          .****.            ..****.    *****             ***        ***.    **.**.
+        .***.      *****            ..*******........**..     ******                 ***.   ***.    ******       .***.
+       .**.        *****                 ..****......         ******   .***.    .*******.   ***.     .****       .***
+      .**.        *****.                                       .***********.   *********.  .****.     .*****    .***.
+     ***.        *****.                                .......   ***...***.  .***   .***   *****.    .**..***  .***.
+    .**.        *****.                    ....       ********.  .***  ***.   .**.   .***  ***..***..***. **** .***
+   .**.            **               .. .******     .****  ****  .**.  ***   .***    ****.***.  *****************.
+  .***.                 .*****.   .***.*******     ***.   .***  ***. .***   ****.  .********     ...   ...*..
+  .**.                .********* .******.  ***    ****    ****..**.  .***  .*********..**.
+  ***                 ***    .*********.  .**.   .****   ********.    ********  ...                      .*******.
+ .**.                 .***....****.***.   .***  .***************.       ....         ..               .***.      .**
+ .**.                  .*********. ***     ********.******..***.                 ..******.           .**.         ***
+ ***.              ****       ***..***     .*****.       .*****.                .***...****.        ***           .**.
+ ***.              ***.      .*** ***.                .********.                ***.    .***       .**.           .**.
+ ***.              ****.    ****  *..                *****. ***.                ***.     ***      .**.          ..***.
+ .**.               ***********                    *****.   ****                .***.    ***     .**.      ...*.*****
+  ***                .******.                     ****.     ****                 .*****..*** ..****.     ***********
+  ***.                                           .****      ***.                    ************..        *******.
+  .***.               ..                          .***.    .***.                      .*****...          .**..
+   .****.           .**.        .**********..      .**********.                      ****
+     ******.    ..*********   .******************       ....                      *****
+       .****************.    ******         ..*******.                       .******
+         .***********..     ******              .**********...         ..********
+                           *****.                   ..*********************.
+                           *****.
+                          .*****
+                          ..  .*        Y O U ' V E  M A D E  I T  O U T  A L I V E  &  W O N  T H E  G A M E ! ! !
 
-
-                                             ..
-                                             ..               ..,          .
-                                                               ,,.
-                                     .              ..
-                                                             ,,             .**                      ,@%
-                            ,,             .                               ...,       &%   .,.       @@
-                                           ,*,.                                      #@*     .      (&.
-                              ,*.          ,,,.                .     *              /%@            *@*
-                          ./@@(. .%,       .        ,.                   /(/,...,,(%@@@@&,        *&%
-                        *@@&.    .&.                           ..                 .*@, ./@&@@@    &&.
-                      *@@,       ((          *&*              ,@@/       .#@&     /&*  *%&*      /@,
-                     @@,   /@%  #%(   .,    (*@.  .    .*.    #@,       (%@* .   .%@  #@/       .@#
-                   *@&.   ,@,  /%(   *@@*(@#.*&    .  @@*/*    @#%&&*  *&%  #.   (@/  #,        (@
-                  (@@     ,&,,@@*    @(.(.%( ,#   *  #&. /&@*  #.(@@. *@(  /@,  ,@%    ,%#,     .
-                  @@(      /@@@/    *# ,*.@*  (  *. .&, %(.&&,& ,@@,  &@. .@&.  #@*   .  .%(   (@(
-                 ,@&                %. (    ,#/      /&@, ,@%# .&@, .%*&*%# &,.%@@       *@&.  .(
-                 #@# .,       ,.   (*##. .&&,             /@(  %@, //  .#.   .  &@   *,/&@/
-                 (@&            *#.    ,%.      .         #@,  @@,&/            /@   ,*
-                  @@%        .%(      .,           ,*     &&   ,%%.  ,           #,
-                   *&%/,,/%&(.     ..            ,/      *@/                      .       .
-                       .                        .*      *@&..,,... .,,,,.,,,******,,..
-                                         .,,****%****,,%@&,,*****,,,*,***********,...,,***,
-                              .,********,,,****,,*/%#*/%.                            ..,,,***.
-                      .,********,,..                                                   ...,***
-                    .***,                             ...,,**********************************,
-                                                 *****,,..                           ....
-                                                 .,,***************,.     .
-                                                                  ..**,        /.
-                                                                    **.
-                                                                .,..
-
-
-
+                                                                Thanks for playing!
                                     """)
-                                    print('You\'ve entered the proper codes to escape!!\nto be continued...')
                                     end = True
                                     break
+                                #a check for if player does not enter the code right
                                 else:
                                     print('Hmm... you must have entered the code wrong.  Try entering it again.\n')
                                     continue
+                            #a check for if player does not enter the code right
                             else:
                                 print('Hmm... you must have entered the code wrong.  Try entering it again.\n')
                                 continue
 
+                    #a check for if player does not enter "look codes" properly
                     else:
                         print('\nSorry, I don\'t recognize that command.  Try entering "look codes" again.')
                         continue
 
+            #returns the player to the previous room if they do not have both codes needed to escape
             else:
                 print('This room is locked and you are unable to enter without the needed escape codes. Keep looking for the codes!\n')
                 prevlocation = 'Long Corridor'
                 location = 'Wing D'
 
 
+    #special case of code for the locked closet which requires a key to unlock
     if location == 'Locked Room':
+        #prints the room name
         print(location)
         print("=" * len(location))
-
 
         lockedCloset = Room(location, worldRooms[location]['DESC'], front=False, back=False, left=False, right=False, locked=True)
         lc = lockedCloset
         if lc.locked == True:
+            #prompts user to enter "use key" whether they have it or not
             useKey = (input('You need to use a key to unlock this door. Type "use key" to use your key and enter the room. \n\n> ')).lower()
             while True:
                 if useKey == 'use key':
+                    #if player has the key, the player is allowed to proceed into the room
                     if 'Key' in inventory:
+                        #prints the room description
                         print(f'\n\n{location}')
                         print("=" * len(location))
                         print('You have unlocked the door and entered the room!\n')
                         print('As you glance around, you notice that the room is bare except for four doors each labeled a letter: "A", "B", "C", & "D." \nBehind one of the doors is the essential code vital to escape. I guess this is just good practice for having to guess on multiple choice tests!')
                         print(f'\nForward: '+ worldRooms[location]['DOORS']['FORWARD'])
+                        #redefines location variables
                         location = 'Locked Room'
                         prevlocation = 'Locked Closet'
+                        #enters back into command loop
                         TextAdventureCmd().cmdloop()
                         print('\n\n')
                         location = 'Wing C'
                         break
+                    #player is returned to the hallway if they do not have the key
                     else:
                         print('This room is locked and you are unable to enter without the key. Keep looking for the key!\n')
                         prevlocation = 'Locked Closet'
                         location = 'Wing C'
                         break
 
+                #a check for if the player does not enter "use key" correctly
                 else:
                     useKey = (input('\nSorry, I don\'t recognize that command.  Try entering "use key" again. \n\n> ')).lower()
                     continue
 
+    #if the player chooses the wrong door within the locked room, the command loop is exited, endgame matches as 'True' and the game is ended
     if endgame == 'True':
         print('\nThanks for playing -- try again')
         break
 
+    #special set of code if the next location the player is trying to travel to is one of the wings
     if location == 'Wing A' or 'Wing B' or 'Wing C' or 'Wing D':
         location = location
         parameters = {
@@ -736,12 +751,15 @@ while True:
             'wingb': Wing(location, worldWings[location]['DESC']),
             'wingc': Wing(location, worldWings[location]['DESC']),
             'wingd': Wing(location, worldWings[location]['DESC'])}
+        #modifies location name to remove space so it matches the keys in the parameters dictionary
         location_modified = location.lower()
         if ' ' in (location_modified):
             location_modified = location_modified.replace(" ", "")
         self = parameters[location_modified]
+        #prints the total description of the wing referencing the Wing class
         self.altnextTurn()
         print(' ')
+        #since there are no items in the wings, the user is prompted to choose a direction
         user_input = str(input('Which way would you like to go next? ')).upper()
         if user_input not in ['FORWARD', 'BACK', 'LEFT', 'RIGHT']:
             if user_input == 'F':
@@ -764,6 +782,7 @@ while True:
                     if user_input == 'R':
                         user_input = 'RIGHT'
         print(' \n \n')
+        #redefines the variable to match the format of the WorldRooms dictionary by making it the "new location from the previous location"
         if prevlocation not in ['Main Hall from Wing A', 'Main Hall from Wing B', 'Main Hall from Wing C', 'Main Hall from Wing D']:
             name_5 = str(f'{location} from {prevlocation}')
         else:
@@ -774,6 +793,7 @@ while True:
         if location == 'Main Hall':
             location = str(f'{location} from {prevlocation}')
 
+    #a check for if the player enters an invalid input
     else:
         print('Sorry, you are unable to go in that direction.')
 
