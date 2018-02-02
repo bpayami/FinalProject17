@@ -1,6 +1,6 @@
 # Missing from Magnet
 
-Hi there, I see that you've stumbled across my game!  Please read on to find out more & I hope you enjoy playing my game as much as I enjoyed making it!
+Hi there, I see that you've stumbled across my game!  Please read on to find out more & I hope you enjoy my game as much as I enjoyed making it!
 
 # Game Synopsis
 My game, entitled "Missing from Magnet," is an escape adventure type game.  The last thing the player can remember was stressing out over midterms before waking up in strange room not knowing where they are or how they got there.  The player must go from room to room, exploring the mansion and interacting with items in the rooms along the way, trying to find the way out.  In order to escape, the player must ultimately find a key to unlock a room and two escape codes ...but be wary, because there is danger along the way, too!
