@@ -10,9 +10,9 @@ To see a flowchart of how the game works, click [here](https://www.draw.io/?ligh
 
 # Sources
 * [Python.org](https://www.python.org/)
-  * I had started writing the code for my game before the project was officially assigned so I found the officially directory of information at python.org to be really useful in providing an in depth full grasp of any concept I was unfamiliar or confused with. I found the information on [classes](https://docs.python.org/3/tutorial/classes.html), [cmd loops](https://docs.python.org/2/library/cmd.html), and [built-in types](https://docs.python.org/3.6/library/stdtypes.html) to be very useful. For instance, command loops were a completely foreign concept to me, but I was able to figure out how to use it through reading the documentation and some trial and error.
+  * I had started writing the code for my game before the project was officially assigned so I found the directory of information at python.org to be really useful in providing an in depth and full grasp of any concept I was unfamiliar or confused with. I found the information on [classes](https://docs.python.org/3/tutorial/classes.html), [cmd loops](https://docs.python.org/2/library/cmd.html), and [built-in types](https://docs.python.org/3.6/library/stdtypes.html) to be very useful. For instance, command loops were a completely foreign concept to me, but I was able to figure out how to use it through reading the documentation and some trial and error.
 * [Stack Overflow](https://stackoverflow.com/)
-  * Throughout the process of writing my code, I found question and answer help forums to be extremely helpful in trying to figure out an issue, understand a new concept, or troubleshoot a problem.  More often than not, whatever question I had was already answered and discussed by the coding community. 
+  * Throughout the process of writing my code, I found question and answer help forums to be extremely helpful in trying to figure out an issue, understand a new concept, or troubleshoot a problem.  More often than not, whatever question I had was already answered by the coding community. 
 
 # Special Notes
 * Tip: When you first enter the game type 'help' for a list of commands
